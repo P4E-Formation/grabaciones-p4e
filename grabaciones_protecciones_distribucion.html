@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grabaciones – Planning for Evolution</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: #F0F4F9;
+      min-height: 100vh;
+      padding: 0 0 3rem;
+    }
+
+    .header {
+      background: #fff;
+      border-bottom: 4px solid #185FA5;
+      padding: 1.5rem 2rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .header img { height: 56px; object-fit: contain; }
+    .header-text h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #1E2A38;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+    }
+    .header-text p { font-size: 0.88rem; color: #555; margin-top: 3px; }
+    .header-text .instructor { font-weight: 600; color: #185FA5; }
+
+    .stripe {
+      height: 6px;
+      background: linear-gradient(90deg, #185FA5 0%, #1D9E75 50%, #EF9F27 100%);
+    }
+
+    .grid {
+      max-width: 960px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.12); }
+
+    .card-head {
+      padding: .8rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .card-head .num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      opacity: .9;
+      line-height: 1;
+    }
+    .card-head .label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.8);
+    }
+
+    .c0 .card-head { background: #185FA5; }
+    .c1 .card-head { background: #0F6E56; }
+    .c2 .card-head { background: #B06D10; }
+    .c3 .card-head { background: #993556; }
+    .c4 .card-head { background: #3C3489; }
+    .c5 .card-head { background: #185FA5; }
+    .c6 .card-head { background: #0F6E56; }
+
+    .card-body { padding: .85rem 1.1rem; display: flex; flex-direction: column; gap: .6rem; }
+
+    .row { display: flex; align-items: center; gap: .6rem; }
+    .icon {
+      width: 30px; height: 30px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 15px;
+    }
+    .icon-link { background: #D6E8F7; }
+    .icon-lock { background: #D0EDE6; }
+
+    .link-text {
+      flex: 1; font-size: .78rem; color: #185FA5;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      text-decoration: none;
+    }
+    .link-text:hover { text-decoration: underline; }
+
+    .code-wrap {
+      flex: 1; background: #F5F7FA; border: 1px solid #DDE3EC;
+      border-radius: 6px; padding: 4px 10px;
+      font-family: 'Courier New', monospace;
+      font-size: .84rem; font-weight: 700; color: #1E2A38;
+      letter-spacing: .5px;
+    }
+
+    .btn-copy {
+      background: #fff; border: 1px solid #C8D4E3;
+      border-radius: 6px; padding: 4px 10px;
+      font-size: .75rem; font-weight: 600; color: #555;
+      cursor: pointer; white-space: nowrap;
+      transition: background .15s, color .15s;
+    }
+    .btn-copy:hover { background: #F0F4F9; color: #1E2A38; }
+    .btn-copy.ok { color: #0F6E56; border-color: #1D9E75; }
+
+    .btn-ver {
+      background: #185FA5; border: none; border-radius: 6px;
+      padding: 4px 11px; font-size: .75rem; font-weight: 600;
+      color: #fff; cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 4px;
+      transition: background .15s;
+    }
+    .btn-ver:hover { background: #0C447C; }
+
+    .empty-state {
+      max-width: 960px;
+      margin: 2.5rem auto 0;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    }
+    .empty-state h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1E2A38;
+      text-transform: uppercase;
+      margin-bottom: .5rem;
+    }
+    .empty-state p { color: #666; font-size: .9rem; }
+
+    .footer {
+      max-width: 960px; margin: 2.5rem auto 0;
+      padding: 0 1.5rem;
+      text-align: center;
+      font-size: .8rem; color: #888;
+      border-top: 1px solid #DDE3EC;
+      padding-top: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     ENCABEZADO — cambia aquí el nombre del curso e instructor
+     ============================================================ -->
+<header class="header">
+  <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAGHBkADASIAAhEBAxEB/8QAHgABAAIDAQEBAQEAAAAAAAAAAAkKBgcIBQQBAwL/xABpEAABAwIDBAIHDhAGEQIHAQEBAAIDBAUGBxEICRIhMUETIjhRYXa0FBcZMkJWcXR1gZWytdIVFhgjNTY3UlVXc5GUobPTM2JykpPBJCU0Q1NUWHeChZaipLHC0dQmxERFY4Oj4fDxw//EAB0BAQACAwADAQAAAAAAAAAAAAAFBwQGCAECAwn/xABKEQEAAQIDAggKBgcGBgMAAAAAAQIDBAURBiESFTFBUVSS0QdTYXFygZGTobETFiI1QtIUFyM2UnPBCCQyYoLwJTM0Q0SyouHx/9oADAMBAAIRAxEAPwCVNERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERB//2Q==" alt="Planning for Evolution">
+  <div class="header-text">
+    <h1>Curso de Coordinación de las Protecciones en Distribución</h1>
+    <p class="instructor">Ing. Yofre Jácome D.</p>
+    <p>Grabaciones — Acceso por Sesión</p>
+  </div>
+</header>
+<div class="stripe"></div>
+
+<!-- ============================================================
+     👇 ZONA DE EDICIÓN — Solo edita este array de sesiones
+        Curso recién iniciado (06 Jul) — aún sin grabaciones.
+        Para agregar una sesión nueva, copia un bloque { ... }
+        y pégalo al final (antes del último ] ), cambia:
+          sesion → número de sesión
+          link   → enlace de Zoom
+          codigo → código de acceso
+     ============================================================ -->
+<script>
+const SESIONES = [
+  /* ← agrega aquí la primera sesión cuando esté disponible, ej:
+  {
+    sesion: 1,
+    link: "https://us06web.zoom.us/rec/share/...",
+    codigo: "xxxxxxx"
+  },
+  */
+];
+</script>
+<!-- ============================================================
+     FIN ZONA DE EDICIÓN
+     ============================================================ -->
+
+<div class="grid" id="grid"></div>
+<div class="empty-state" id="emptyState" style="display:none;">
+  <h2>Aún no hay grabaciones disponibles</h2>
+  <p>Las grabaciones se irán publicando aquí conforme avance el curso.</p>
+</div>
+
+<footer class="footer">
+  Planning for Evolution S.A.C. &nbsp;·&nbsp; Grabaciones de uso exclusivo para participantes inscritos
+</footer>
+
+<script>
+  const grid = document.getElementById('grid');
+  const emptyState = document.getElementById('emptyState');
+  const colors = ['c0','c1','c2','c3','c4','c5','c6'];
+
+  if (SESIONES.length === 0) {
+    emptyState.style.display = 'block';
+  } else {
+    SESIONES.forEach((s, i) => {
+      const short = s.link.length > 55 ? s.link.slice(0, 55) + '…' : s.link;
+      const col = colors[i % colors.length];
+      const card = document.createElement('div');
+      card.className = 'card ' + col;
+      card.innerHTML =
+        '<div class="card-head">' +
+          '<div>' +
+            '<div class="label">Sesión</div>' +
+            '<div class="num">' + String(s.sesion).padStart(2,'0') + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="card-body">' +
+          '<div class="row">' +
+            '<div class="icon icon-link">🔗</div>' +
+            '<a class="link-text" href="' + s.link + '" target="_blank" title="' + s.link + '">' + short + '</a>' +
+            '<a class="btn-ver" href="' + s.link + '" target="_blank">▶ Ver</a>' +
+          '</div>' +
+          '<div class="row">' +
+            '<div class="icon icon-lock">🔑</div>' +
+            '<span class="code-wrap">' + s.codigo + '</span>' +
+            '<button class="btn-copy" onclick="copiar(this, \'' + s.codigo.replace(/'/g,"\'") + '\')">Copiar</button>' +
+          '</div>' +
+        '</div>';
+      grid.appendChild(card);
+    });
+  }
+
+  function copiar(btn, texto) {
+    navigator.clipboard.writeText(texto).then(() => {
+      btn.textContent = '✓ Copiado';
+      btn.classList.add('ok');
+      setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('ok'); }, 1800);
+    });
+  }
+</script>
+</body>
+</html>
