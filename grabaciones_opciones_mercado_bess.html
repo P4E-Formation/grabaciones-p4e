@@ -255,11 +255,39 @@ const ESPECIALES = [
     ponente: "Ing. Pool Suarez",
     link: "https://us06web.zoom.us/rec/share/S2p-_0E7PU2CPTo02cKc55TfVTMXlUoEgUrcB0kVPV_lVKcuVc-kP7JXK9-7iuDs.i6ptpRvysPgQyt11",
     codigo: ""
+  }
+];
+
+// Curso: Dimensionamiento y diseño de BESS con Homer Pro
+const HOMER = [
+  {
+    instructor: "Ing. Héctor Arámbulo",
+    clase: 1,
+    link: "https://us06web.zoom.us/rec/share/52u2WzOVkDSmuOX5w_R9EIMiDs6SOW4YScMFE6t-TF1ZH1Rj1oMwCq4VcBxpsgQH.4JXwWwIbOKTwACYn",
+    codigo: ""
   },
   {
-    titulo: "Primera Clase de Hector Arámbulo",
-    ponente: "Ing. Hectpr Arámbulo",
-    link: "https://us06web.zoom.us/rec/share/52u2WzOVkDSmuOX5w_R9EIMiDs6SOW4YScMFE6t-TF1ZH1Rj1oMwCq4VcBxpsgQH.4JXwWwIbOKTwACYn",
+    instructor: "Ing. Héctor Arámbulo",
+    clase: 2,
+    link: "https://drive.google.com/file/d/1fWhnTLq2BqcvLzSZvDFvck2S05BO1Lmf/view",
+    codigo: ""
+  },
+  {
+    instructor: "Ing. Yerson García",
+    clase: 1,
+    link: "https://us06web.zoom.us/rec/share/ydGHQGEq9usDunnQLqwxY5L-bVfMAJoUD4I35aj_RZimmXsWgGzbRIvkL3HTgavc.-ubV0yX97Ljjx7e5",
+    codigo: ""
+  },
+  {
+    instructor: "Ing. Yerson García",
+    clase: 2,
+    link: "https://us06web.zoom.us/rec/share/w5-RDE9UFMMHEizBaX7myKROesTZnJSg3bFMCR9UQiaKqCwrz8wUlCSndwCIs-R_.Uk60t_FVlRNH5JIL",
+    codigo: ""
+  },
+  {
+    instructor: "Ing. Yerson García",
+    clase: 3,
+    link: "https://us06web.zoom.us/rec/share/veWr14QriTY2MILig6URa_IUKJCGrY3rFcm8y3aLYJAIje_ur2sOiZVTEMPbh8t1.CaJsVkA62m4J4Vlm",
     codigo: ""
   }
 ];
@@ -268,12 +296,15 @@ const ESPECIALES = [
      FIN ZONA DE EDICIÓN
      ============================================================ -->
 
-<h2 class="section-title">Sesiones del curso</h2>
+<h2 class="section-title">Aplicaciones de Sistemas BESS</h2>
 <div class="grid" id="grid"></div>
 <div class="empty-state" id="emptyState" style="display:none;">
   <h2>Aún no hay grabaciones disponibles</h2>
   <p>Las grabaciones se irán publicando aquí conforme avance el curso.</p>
 </div>
+
+<h2 class="section-title">Dimensionamiento y diseño de BESS con Homer Pro</h2>
+<div class="grid" id="gridHomer"></div>
 
 <div id="especialesWrap" style="display:none;">
   <h2 class="section-title">Sesión especial</h2>
@@ -328,6 +359,18 @@ const ESPECIALES = [
       grid.appendChild(card);
     });
   }
+
+  const gridH = document.getElementById('gridHomer');
+  HOMER.forEach((s, i) => {
+    const card = document.createElement('div');
+    card.className = 'card ' + colors[i % colors.length];
+    card.innerHTML =
+      '<div class="card-head"><div>' +
+        '<div class="label">' + esc(s.instructor) + '</div>' +
+        '<div class="num">Clase ' + String(s.clase).padStart(2,'0') + '</div>' +
+      '</div></div>' + cuerpo(s);
+    gridH.appendChild(card);
+  });
 
   if (ESPECIALES.length > 0) {
     document.getElementById('especialesWrap').style.display = 'block';
